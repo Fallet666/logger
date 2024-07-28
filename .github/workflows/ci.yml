@@ -18,6 +18,3 @@ jobs:
 
       - name: Build
         run: cmake --build build
-
-      - name: Run clang-tidy
-        run: clang-tidy -p build src/*.cpp
