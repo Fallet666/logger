@@ -27,6 +27,7 @@ std::string logger::formatLog(LogLevel level, const std::string &message) {
 }
 
 void logger::logMessage(LogLevel level, const std::string &message) {
+    std::lock_guard<std::mutex> lock(logMutex);
     out<<formatLog(level, message);
 }
 

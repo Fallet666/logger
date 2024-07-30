@@ -7,10 +7,13 @@
 #include <iostream>
 #include <fmt/core.h>
 #include <fmt/chrono.h>
+#include <thread>
+#include <mutex>
 
 
 enum LogLevel { DEBUG, INFO, WARN, ERROR };
 class logger {
+    std::mutex logMutex;
     const std::string name;
     std::ostream &out;
     std::string formatLog(LogLevel level, const std::string &message);
