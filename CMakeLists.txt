@@ -3,10 +3,12 @@ project(logger)
 
 set(CMAKE_CXX_STANDARD 17)
 
+include_directories(include/logger)
+
 add_executable(logger
         main.cpp
-        logger.cpp
-        logger.h
+        src/logger/logger.cpp
+        include/logger/logger.h
 )
 
 enable_testing()
@@ -17,6 +19,9 @@ FetchContent_Declare(
 )
 # Эта строка загружает и собирает Google Test
 FetchContent_MakeAvailable(googletest)
+
+find_package(fmt REQUIRED)
+target_link_libraries(logger PRIVATE fmt::fmt)
 
 
 add_executable(my_tests tests/my_tests.cpp)

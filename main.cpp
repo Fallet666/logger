@@ -1,4 +1,7 @@
+#include <iostream>
+#include "logger.h"
 
 int main() {
-    return 0;
+    logger log("abobis");
+    log.logMessage(INFO, "Hello word!");
 }
