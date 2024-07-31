@@ -39,4 +39,4 @@ enable_testing()
 
 add_executable(my_tests tests/tests.cpp)
 target_link_libraries(my_tests PRIVATE logger_lib gtest gtest_main)
-add_test(NAME MyTests COMMAND my_tests)
+add_test(NAME Tests COMMAND my_tests)
