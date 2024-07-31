@@ -11,7 +11,6 @@ protected:
     Logger::Logger logger{"TestLogger", oss};
 
     void SetUp() override {
-        // Переинициализируем строковой поток перед каждым тестом
         oss.str("");
         oss.clear();
     }
@@ -70,7 +69,6 @@ TEST_F(LoggerTest, FileLogging) {
         file_logger.logMessage(Logger::ERROR, "Error message");
     }
 
-    // Открываем файл для проверки записанных сообщений
     std::ifstream file(log_filename);
     std::string line;
     std::vector<std::string> lines;
@@ -78,13 +76,11 @@ TEST_F(LoggerTest, FileLogging) {
         lines.push_back(line);
     }
 
-    // Проверяем, что все сообщения записаны в файл
     ASSERT_EQ(lines.size(), 4);
     EXPECT_NE(lines[0].find("DEBUG: "), std::string::npos);
     EXPECT_NE(lines[1].find("INFO: "), std::string::npos);
     EXPECT_NE(lines[2].find("WARN: "), std::string::npos);
     EXPECT_NE(lines[3].find("ERROR: "), std::string::npos);
 
-    // Удаляем файл после теста
     std::filesystem::remove(log_filename);
 }
