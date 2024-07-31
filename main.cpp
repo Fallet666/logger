@@ -2,6 +2,6 @@
 #include "logger.h"
 
 int main() {
-    logger log("abobis");
+    Logger log("abobis");
     log.logMessage(INFO, "Hello word!");
 }

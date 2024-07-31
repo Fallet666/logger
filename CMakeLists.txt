@@ -8,7 +8,6 @@ include_directories(include/logger)
 add_executable(logger
         main.cpp
         src/logger/logger.cpp
-        include/logger/logger.h
 )
 
 enable_testing()

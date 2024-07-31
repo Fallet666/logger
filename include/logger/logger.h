@@ -12,17 +12,29 @@
 
 
 enum LogLevel { DEBUG, INFO, WARN, ERROR };
-class logger {
-    std::mutex logMutex;
+
+constexpr const char *ToString(LogLevel level) {
+    switch (level) {
+        case DEBUG: return "DEBUG";
+        case INFO: return "INFO";
+        case WARN: return "WARN";
+        case ERROR: return "ERROR";
+        default: return "UNKNOWN";
+    }
+}
+
+class Logger {
+    std::mutex log_mutex;
     const std::string name;
     std::ostream &out;
+
     std::string formatLog(LogLevel level, const std::string &message);
+
 public:
-    logger(std::string  name, std::ostream &out = std::cout) : out(out), name(std::move(name)){};
-    static std::string getCurrentTime();
+    explicit Logger(std::string name, std::ostream &out = std::cout);
+
     void logMessage(LogLevel level, const std::string &message);
 };
-
 
 
 #endif //LOGGER_H
