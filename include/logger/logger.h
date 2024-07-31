@@ -10,16 +10,17 @@
 #include <thread>
 #include <mutex>
 
+namespace LogLevel {
+    enum LogLevel { DEBUG, INFO, WARN, ERROR };
 
-enum LogLevel { DEBUG, INFO, WARN, ERROR };
-
-constexpr const char *ToString(LogLevel level) {
-    switch (level) {
-        case DEBUG: return "DEBUG";
-        case INFO: return "INFO";
-        case WARN: return "WARN";
-        case ERROR: return "ERROR";
-        default: return "UNKNOWN";
+    constexpr const char *toString(LogLevel level) {
+        switch (level) {
+            case DEBUG: return "DEBUG";
+            case INFO: return "INFO";
+            case WARN: return "WARN";
+            case ERROR: return "ERROR";
+            default: return "UNKNOWN";
+        }
     }
 }
 
@@ -28,12 +29,12 @@ class Logger {
     const std::string name;
     std::ostream &out;
 
-    std::string formatLog(LogLevel level, const std::string &message);
+    std::string formatLog(LogLevel::LogLevel level, const std::string &message);
 
 public:
     explicit Logger(std::string name, std::ostream &out = std::cout);
 
-    void logMessage(LogLevel level, const std::string &message);
+    void logMessage(LogLevel::LogLevel level, const std::string &message);
 };
 
 
