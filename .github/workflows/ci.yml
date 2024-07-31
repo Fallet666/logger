@@ -19,6 +19,10 @@ jobs:
       - name: Build
         run: cmake --build build
 
+  test:
+      runs-on: ubuntu-latest
+
+      steps:
       - name: Run tests
         run: |
           cd build
