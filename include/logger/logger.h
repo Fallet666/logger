@@ -10,7 +10,7 @@
 #include <thread>
 #include <mutex>
 
-namespace LogLevel {
+namespace Logger {
     enum LogLevel { DEBUG, INFO, WARN, ERROR };
 
     constexpr const char *toString(LogLevel level) {
@@ -22,20 +22,19 @@ namespace LogLevel {
             default: return "UNKNOWN";
         }
     }
+
+    class Logger {
+        std::mutex log_mutex;
+        const std::string name;
+        std::ostream &out;
+
+        std::string formatLog(LogLevel level, const std::string &message);
+
+    public:
+        explicit Logger(std::string name, std::ostream &out = std::cout);
+
+        void logMessage(LogLevel level, const std::string &message);
+    };
 }
-
-class Logger {
-    std::mutex log_mutex;
-    const std::string name;
-    std::ostream &out;
-
-    std::string formatLog(LogLevel::LogLevel level, const std::string &message);
-
-public:
-    explicit Logger(std::string name, std::ostream &out = std::cout);
-
-    void logMessage(LogLevel::LogLevel level, const std::string &message);
-};
-
 
 #endif //LOGGER_H

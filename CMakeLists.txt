@@ -3,20 +3,14 @@ project(logger)
 
 set(CMAKE_CXX_STANDARD 17)
 
-include_directories(include/logger)
+include_directories(include)
 
-add_executable(logger
-        main.cpp
-        src/logger/logger.cpp
-)
-
-enable_testing()
 include(FetchContent)
+
 FetchContent_Declare(
         googletest
         URL https://github.com/google/googletest/archive/release-1.11.0.tar.gz
 )
-# Эта строка загружает и собирает Google Test
 FetchContent_MakeAvailable(googletest)
 
 FetchContent_Declare(
@@ -26,9 +20,23 @@ FetchContent_Declare(
         DOWNLOAD_EXTRACT_TIMESTAMP true
 )
 FetchContent_MakeAvailable(fmt)
-target_link_libraries(logger PRIVATE fmt::fmt)
 
+add_library(logger_lib
+        src/logger/logger.cpp
+)
+target_link_libraries(logger_lib PRIVATE fmt::fmt)
+target_include_directories(logger_lib PUBLIC ${fmt_SOURCE_DIR}/include)
 
-add_executable(my_tests tests/my_tests.cpp)
-target_link_libraries(my_tests gtest gtest_main)
+set_target_properties(logger_lib PROPERTIES PUBLIC_HEADER include/logger/logger.h)
+
+add_executable(logger
+        main.cpp
+)
+target_link_libraries(logger PRIVATE logger_lib fmt::fmt)
+target_include_directories(logger PRIVATE ${fmt_SOURCE_DIR}/include)
+
+enable_testing()
+
+add_executable(my_tests tests/tests.cpp)
+target_link_libraries(my_tests PRIVATE logger_lib gtest gtest_main)
 add_test(NAME MyTests COMMAND my_tests)
