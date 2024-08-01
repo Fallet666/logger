@@ -1,6 +1,6 @@
 name: C++ CI
 
-on: [push, pull_request]
+on: [pull_request]
 
 jobs:
   build:
@@ -18,3 +18,24 @@ jobs:
 
       - name: Build
         run: cmake --build build
+
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: sudo apt-get install -y g++ cmake
+
+      - name: Configure CMake
+        run: cmake -S . -B build
+
+      - name: Build
+        run: cmake --build build
+
+      - name: Run tests
+        run: |
+          cd build
+          ctest --output-on-failure

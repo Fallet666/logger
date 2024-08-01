@@ -1,4 +1,7 @@
+#include <iostream>
+#include "logger/logger.h"
 
 int main() {
-    return 0;
+    Logger::Logger log("abobis");
+    log.logMessage(Logger::INFO, "Hello word!");
 }
