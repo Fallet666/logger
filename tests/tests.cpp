@@ -10,16 +10,18 @@ protected:
     std::ostringstream oss;
     Logger::Logger logger{"TestLogger", oss};
 
-    static std::string buildExpectedLogString(Logger::LogLevel level, const std::string& loggerName, const std::string& message) {
-        std::string level_str = Logger::toString(level);
+    static std::string buildExpectedLogString(Logger::LogLevel level, const std::string &loggerName,
+                                              const std::string &message) {
+        std::string level_str = Logger::toString(level, false);
         return level_str + ": \\d{2}:\\d{2}:\\d{2} \\[" + loggerName + "\\]: " + message + "\n?";
     }
 
-    void checkLog(const std::string& expectedLog) {
+    void checkLog(const std::string &expectedLog) {
         std::regex logRegex(expectedLog);
         bool match = std::regex_match(oss.str(), logRegex);
         if (!match) {
-            std::cout << "Log does not match. Log: \"" << oss.str() << "\" Expected: \"" << expectedLog << "\"" << std::endl;
+            std::cout << "Log does not match. Log: \"" << oss.str() << "\" Expected: \"" << expectedLog << "\"" <<
+                    std::endl;
         }
         EXPECT_TRUE(match);
     }
@@ -52,7 +54,7 @@ TEST_F(LoggerTest, MultiThreadedLogging) {
             logger.logMessage(Logger::INFO, "Message " + std::to_string(i));
         });
     }
-    for (auto &t : threads) {
+    for (auto &t: threads) {
         t.join();
     }
 
@@ -88,9 +90,26 @@ TEST_F(LoggerTest, LogToFile) {
     std::regex logRegex(buildExpectedLogString(Logger::DEBUG, "FileLogger", "File log message"));
     bool match = std::regex_match(buffer.str(), logRegex);
     if (!match) {
-        std::cout << "Log does not match. Log: \"" << buffer.str() << "\" Expected: \"" << buildExpectedLogString(Logger::DEBUG, "FileLogger", "File log message") << "\"" << std::endl;
+        std::cout << "Log does not match. Log: \"" << buffer.str() << "\" Expected: \"" << buildExpectedLogString(
+            Logger::DEBUG, "FileLogger", "File log message") << "\"" << std::endl;
     }
     EXPECT_TRUE(match);
 
     std::remove("test_log.txt");
+}
+
+TEST_F(LoggerTest, LevelsChange) {
+    logger.setLogLevel(Logger::ERROR);
+    logger.logMessage(Logger::ERROR, "Error message");
+    checkLog(buildExpectedLogString(Logger::ERROR, "TestLogger", "Error message"));
+    logger.logMessage(Logger::INFO, "Info message");
+
+    std::string buf_line;
+    int lines = 0;
+    std::istringstream logStream(oss.str());
+
+    while (getline(logStream, buf_line)) {
+        lines++;
+    }
+    EXPECT_EQ(lines, 1);
 }

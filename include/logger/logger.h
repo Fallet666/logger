@@ -11,29 +11,35 @@
 #include <mutex>
 
 namespace Logger {
+    const std::string RESET = "\033[0m";
+    const std::string WHITE = "\033[37m";
+    const std::string GREEN = "\033[32m";
+    const std::string YELLOW = "\033[33m";
+    const std::string RED = "\033[31m";
+
     enum LogLevel { DEBUG, INFO, WARN, ERROR };
 
-    constexpr const char *toString(LogLevel level) {
-        switch (level) {
-            case DEBUG: return "DEBUG";
-            case INFO: return "INFO";
-            case WARN: return "WARN";
-            case ERROR: return "ERROR";
-            default: return "UNKNOWN";
-        }
-    }
+    std::string toString(LogLevel level, bool use_colors);
 
     class Logger {
+        bool use_colors = true;
         std::mutex log_mutex;
-        const std::string name;
-        std::ostream &out;
+        std::string name;
+        std::ostream *out;
+        LogLevel log_level;
 
         std::string formatLog(LogLevel level, const std::string &message);
 
     public:
-        explicit Logger(std::string name, std::ostream &out = std::cout);
+        explicit Logger(std::string name, std::ostream &out = std::cout, LogLevel level = DEBUG);
 
         void logMessage(LogLevel level, const std::string &message);
+
+        void setLogLevel(LogLevel log_level);
+
+        void setName(const std::string &name);
+
+        void setOut(std::ostream &out);
     };
 }
 
