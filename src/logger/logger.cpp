@@ -1,29 +1,16 @@
 #include "logger/logger.h"
 
 namespace Logger {
-    Logger::Logger(std::string name, std::ostream &out, LogLevel level) : name{std::move(name)},
-                                                                          out{&out},
-                                                                          log_level{level} {
+    Logger::Logger(std::string name, std::ostream &out, LogLevel level)
+    : name{std::move(name)}
+    , out{&out} {
         use_colors = &out == &std::cout;
     }
 
     std::string toString(LogLevel level, bool use_colors) {
-        if (!use_colors) {
-            switch (level) {
-                case DEBUG: return "DEBUG";
-                case INFO: return "INFO";
-                case WARN: return "WARN";
-                case ERROR: return "ERROR";
-                default: return "UNKNOWN";
-            }
-        }
-        switch (level) {
-            case DEBUG: return WHITE + "DEBUG";
-            case INFO: return GREEN + "INFO";
-            case WARN: return YELLOW + "WARN";
-            case ERROR: return RED + "ERROR";
-            default: return "UNKNOWN";
-        }
+        const std::string levels[] = { "DEBUG", "INFO", "WARN", "ERROR" };
+        const std::string color_levels[] = { WHITE + "DEBUG", GREEN + "INFO", YELLOW + "WARN", RED + "ERROR" };
+        return use_colors ? color_levels[level] : levels[level];
     }
 
 
@@ -39,25 +26,26 @@ namespace Logger {
     }
 
     void Logger::logMessage(LogLevel level, const std::string &message) {
-        if (level < log_level) return;
+        if (level < globalLogLevel) return;
 
         std::lock_guard lock(this->log_mutex);
         *this->out << this->formatLog(level, message);
         if (use_colors)
             *this->out << RESET;
+        //чтобы потом в cout оставался стоковый цвет
     }
 
-    void Logger::setLogLevel(LogLevel log_level) {
-        std::lock_guard lock(this->log_mutex);
-        this->log_level = log_level;
-    }
-
-    void Logger::setName(const std::string &name) {
+    void Logger::resetName(const std::string &name) {
         std::lock_guard lock(this->log_mutex);
         this->name = name;
     }
 
-    void Logger::setOut(std::ostream &out) {
+    void Logger::resetName(std::string &&name) {
+        std::lock_guard lock(this->log_mutex);
+        this->name = std::move(name);
+    }
+
+    void Logger::setOutStream(std::ostream &out) {
         std::lock_guard lock(this->log_mutex);
         this->out = &out;
         use_colors = &out == &std::cout;

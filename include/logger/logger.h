@@ -19,27 +19,31 @@ namespace Logger {
 
     enum LogLevel { DEBUG, INFO, WARN, ERROR };
 
+#ifdef GLOBAL_LOG_LEVEL
+    const LogLevel globalLogLevel = GLOBAL_LOG_LEVEL;
+#else
+    const LogLevel globalLogLevel = DEBUG;
+#endif
+
     std::string toString(LogLevel level, bool use_colors);
 
     class Logger {
+    public:
+        explicit Logger(std::string name, std::ostream &out = std::cout, LogLevel level = DEBUG);
+        void logMessage(LogLevel level, const std::string &message);
+        void resetName(const std::string &name);
+        void resetName(std::string &&name);
+        void setOutStream(std::ostream &out);
+
+    private:
+        std::string formatLog(LogLevel level, const std::string &message);
+
+    private:
         bool use_colors = true;
         std::mutex log_mutex;
         std::string name;
         std::ostream *out;
-        LogLevel log_level;
 
-        std::string formatLog(LogLevel level, const std::string &message);
-
-    public:
-        explicit Logger(std::string name, std::ostream &out = std::cout, LogLevel level = DEBUG);
-
-        void logMessage(LogLevel level, const std::string &message);
-
-        void setLogLevel(LogLevel log_level);
-
-        void setName(const std::string &name);
-
-        void setOut(std::ostream &out);
     };
 }
 
