@@ -8,8 +8,6 @@ namespace Logger {
     }
 
     std::string toString(LogLevel level, bool use_colors) {
-        const std::string levels[] = { "DEBUG", "INFO", "WARN", "ERROR" };
-        const std::string color_levels[] = { WHITE + "DEBUG", GREEN + "INFO", YELLOW + "WARN", RED + "ERROR" };
         return use_colors ? color_levels[level] : levels[level];
     }
 

@@ -18,6 +18,8 @@ namespace Logger {
     const std::string RED = "\033[31m";
 
     enum LogLevel { DEBUG, INFO, WARN, ERROR };
+    const std::string levels[] = { "DEBUG", "INFO", "WARN", "ERROR" };
+    const std::string color_levels[] = { WHITE + "DEBUG", GREEN + "INFO", YELLOW + "WARN", RED + "ERROR" };
 
 #ifdef GLOBAL_LOG_LEVEL
     const LogLevel globalLogLevel = GLOBAL_LOG_LEVEL;

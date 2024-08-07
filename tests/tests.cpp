@@ -97,18 +97,3 @@ TEST_F(LoggerTest, LogToFile) {
 
     std::remove("test_log.txt");
 }
-
-// TEST_F(LoggerTest, LevelsChange) {
-//     logger.logMessage(Logger::ERROR, "Error message");
-//     checkLog(buildExpectedLogString(Logger::ERROR, "TestLogger", "Error message"));
-//     logger.logMessage(Logger::INFO, "Info message");
-//
-//     std::string buf_line;
-//     int lines = 0;
-//     std::istringstream logStream(oss.str());
-//
-//     while (getline(logStream, buf_line)) {
-//         lines++;
-//     }
-//     EXPECT_EQ(lines, 1);
-// }
