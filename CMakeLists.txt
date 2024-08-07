@@ -3,6 +3,9 @@ project(logger)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set(DEFAULT_LOG_LEVEL DEBUG)
+add_compile_definitions(GLOBAL_LOG_LEVEL=${DEFAULT_LOG_LEVEL})
+
 include_directories(include)
 
 include(FetchContent)
