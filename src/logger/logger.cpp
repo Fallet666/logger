@@ -37,10 +37,9 @@ namespace Logger {
         std::lock_guard lock(this->log_mutex);
         this->name = name;
     }
-
     void Logger::resetName(std::string &&name) {
         std::lock_guard lock(this->log_mutex);
-        this->name = std::move(name);
+        this->name = name;
     }
 
     void Logger::setOutStream(std::ostream &out) {
