@@ -13,7 +13,7 @@ protected:
     static std::string buildExpectedLogString(Logger::LogLevel level, const std::string &loggerName,
                                               const std::string &message) {
         std::string level_str = Logger::toString(level, false);
-        return level_str + ": \\d{2}:\\d{2}:\\d{2} \\[" + loggerName + "\\]: " + message + "\n?";
+        return level_str + R"(: \d{2}:\d{2}:\d{2} \[)" + loggerName + "\\]: " + message + "\n?";
     }
 
     void checkLog(const std::string &expectedLog) {
