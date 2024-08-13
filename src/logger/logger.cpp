@@ -2,8 +2,8 @@
 
 namespace Logger {
     Logger::Logger(std::string name, std::ostream &out, LogLevel level)
-    : name{std::move(name)}
-    , out{&out} {
+        : name{std::move(name)}
+          , out{&out} {
         use_colors = &out == &std::cout;
     }
 
@@ -37,6 +37,7 @@ namespace Logger {
         std::lock_guard lock(this->log_mutex);
         this->name = name;
     }
+
     void Logger::resetName(std::string &&name) {
         std::lock_guard lock(this->log_mutex);
         this->name = name;

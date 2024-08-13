@@ -18,8 +18,12 @@ namespace Logger {
     const std::string RED = "\033[31m";
 
     enum LogLevel { DEBUG, INFO, WARN, ERROR };
-    const std::string levels[] = { "DEBUG", "INFO", "WARN", "ERROR" };
-    const std::string color_levels[] = { WHITE + "DEBUG", GREEN + "INFO", YELLOW + "WARN", RED + "ERROR" };
+
+    const std::string levels[] = {"DEBUG", "INFO", "WARN", "ERROR"};
+    const std::string color_levels[] = {
+        WHITE + "DEBUG" + RESET, GREEN + "INFO" + RESET, YELLOW + "WARN" + RESET, RED + "ERROR" + RESET
+    };
+
 
 #ifdef GLOBAL_LOG_LEVEL
     const LogLevel globalLogLevel = GLOBAL_LOG_LEVEL;
@@ -32,9 +36,13 @@ namespace Logger {
     class Logger {
     public:
         explicit Logger(std::string name, std::ostream &out = std::cout, LogLevel level = DEBUG);
+
         void logMessage(LogLevel level, const std::string &message);
+
         void resetName(const std::string &name);
+
         void resetName(std::string &&name);
+
         void setOutStream(std::ostream &out);
 
     private:
@@ -45,7 +53,6 @@ namespace Logger {
         std::mutex log_mutex;
         std::string name;
         std::ostream *out;
-
     };
 }
 
