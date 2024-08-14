@@ -17,8 +17,6 @@ namespace Logger {
                 current_time = fmt::format(
                     "{:%H:%M:%S}",
                     fmt::localtime(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())));
-
-        /*уровень: Системное время [имя логгера]: message*/
         std::string formatted_message = fmt::format("{}: {} [{}]: {}\n", level_str, current_time, this->name, message);
         return formatted_message;
     }
@@ -29,8 +27,8 @@ namespace Logger {
         std::lock_guard lock(this->log_mutex);
         *this->out << this->formatLog(level, message);
         if (use_colors)
+            //because of stock color in cout
             *this->out << RESET;
-        //чтобы потом в cout оставался стоковый цвет
     }
 
     void Logger::resetName(const std::string &name) {
@@ -38,7 +36,7 @@ namespace Logger {
         this->name = name;
     }
 
-    void Logger::resetName(std::string &&name) {
+    void Logger::resetName(const std::string &&name) {
         std::lock_guard lock(this->log_mutex);
         this->name = name;
     }

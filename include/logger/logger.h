@@ -41,7 +41,7 @@ namespace Logger {
 
         void resetName(const std::string &name);
 
-        void resetName(std::string &&name);
+        void resetName(const std::string &&name);
 
         void setOutStream(std::ostream &out);
 

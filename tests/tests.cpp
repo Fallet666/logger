@@ -63,7 +63,7 @@ TEST_F(LoggerTest, MultiThreadedLogging) {
     int messageCount = 0;
 
     while (std::getline(logStream, logEntry)) {
-        std::regex logRegex("INFO: \\d{2}:\\d{2}:\\d{2} \\[TestLogger\\]: Message \\d");
+        std::regex logRegex(R"(INFO: \d{2}:\d{2}:\d{2} \[TestLogger\]: Message \d)");
         bool match = std::regex_match(logEntry, logRegex);
         EXPECT_TRUE(match);
         if (match) {
