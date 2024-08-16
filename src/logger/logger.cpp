@@ -13,12 +13,22 @@ namespace Logger {
 
 
     std::string Logger::formatLog(LogLevel level, const std::string &message) {
-        std::string level_str = toString(level, use_colors),
-                current_time = fmt::format(
-                    "{:%H:%M:%S}",
-                    fmt::localtime(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now())));
-        std::string formatted_message = fmt::format("{}: {} [{}]: {}\n", level_str, current_time, this->name, message);
-        return formatted_message;
+        std::string result;
+        for (size_t i = 0; i < this->format_string.size(); ++i) {
+            if (this->format_string[i] == '%' && i + 1 < this->format_string.size()) {
+                switch (this->format_string[++i]) {
+                    case 'L': result += toString(level, use_colors); break;
+                    case 'T': result += fmt::format("{:%H:%M:%S}", fmt::localtime(std::chrono::system_clock::to_time_t(std::chrono::system_clock::now()))); break;
+                    case 'N': result += this->name; break;
+                    case 'M': result += message; break;
+                    case 't': result += std::to_string(std::hash<std::thread::id>{}(std::this_thread::get_id())); break;
+                    default: result += '%'; result += this->format_string[i]; break;
+                }
+            } else {
+                result += this->format_string[i];
+            }
+        }
+        return result;
     }
 
     void Logger::logMessage(LogLevel level, const std::string &message) {
@@ -46,4 +56,10 @@ namespace Logger {
         this->out = &out;
         use_colors = &out == &std::cout;
     }
+
+    void Logger::setFormatString(const std::string &format_string) {
+        std::lock_guard lock(this->log_mutex);
+        this->format_string = format_string;
+    }
+
 }

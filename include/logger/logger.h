@@ -36,14 +36,11 @@ namespace Logger {
     class Logger {
     public:
         explicit Logger(std::string name, std::ostream &out = std::cout, LogLevel level = DEBUG);
-
         void logMessage(LogLevel level, const std::string &message);
-
         void resetName(const std::string &name);
-
         void resetName(const std::string &&name);
-
         void setOutStream(std::ostream &out);
+        void setFormatString(const std::string &format_string);
 
     private:
         std::string formatLog(LogLevel level, const std::string &message);
@@ -53,6 +50,8 @@ namespace Logger {
         std::mutex log_mutex;
         std::string name;
         std::ostream *out;
+        std::string format_string = "%L: %T [%N]: %M\n"; // Default format
+
     };
 }
 
