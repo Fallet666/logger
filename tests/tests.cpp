@@ -10,16 +10,18 @@ protected:
     std::ostringstream oss;
     Logger::Logger logger{"TestLogger", oss};
 
-    static std::string buildExpectedLogString(Logger::LogLevel level, const std::string& loggerName, const std::string& message) {
-        std::string level_str = Logger::toString(level);
-        return level_str + ": \\d{2}:\\d{2}:\\d{2} \\[" + loggerName + "\\]: " + message + "\n?";
+    static std::string buildExpectedLogString(Logger::LogLevel level, const std::string &loggerName,
+                                              const std::string &message) {
+        std::string level_str = Logger::toString(level, false);
+        return level_str + R"(: \d{2}:\d{2}:\d{2} \[)" + loggerName + "\\]: " + message + "\n?";
     }
 
-    void checkLog(const std::string& expectedLog) {
+    void checkLog(const std::string &expectedLog) {
         std::regex logRegex(expectedLog);
         bool match = std::regex_match(oss.str(), logRegex);
         if (!match) {
-            std::cout << "Log does not match. Log: \"" << oss.str() << "\" Expected: \"" << expectedLog << "\"" << std::endl;
+            std::cout << "Log does not match. Log: \"" << oss.str() << "\" Expected: \"" << expectedLog << "\"" <<
+                    std::endl;
         }
         EXPECT_TRUE(match);
     }
@@ -52,7 +54,7 @@ TEST_F(LoggerTest, MultiThreadedLogging) {
             logger.logMessage(Logger::INFO, "Message " + std::to_string(i));
         });
     }
-    for (auto &t : threads) {
+    for (auto &t: threads) {
         t.join();
     }
 
@@ -61,7 +63,7 @@ TEST_F(LoggerTest, MultiThreadedLogging) {
     int messageCount = 0;
 
     while (std::getline(logStream, logEntry)) {
-        std::regex logRegex("INFO: \\d{2}:\\d{2}:\\d{2} \\[TestLogger\\]: Message \\d");
+        std::regex logRegex(R"(INFO: \d{2}:\d{2}:\d{2} \[TestLogger\]: Message \d)");
         bool match = std::regex_match(logEntry, logRegex);
         EXPECT_TRUE(match);
         if (match) {
@@ -88,7 +90,8 @@ TEST_F(LoggerTest, LogToFile) {
     std::regex logRegex(buildExpectedLogString(Logger::DEBUG, "FileLogger", "File log message"));
     bool match = std::regex_match(buffer.str(), logRegex);
     if (!match) {
-        std::cout << "Log does not match. Log: \"" << buffer.str() << "\" Expected: \"" << buildExpectedLogString(Logger::DEBUG, "FileLogger", "File log message") << "\"" << std::endl;
+        std::cout << "Log does not match. Log: \"" << buffer.str() << "\" Expected: \"" << buildExpectedLogString(
+            Logger::DEBUG, "FileLogger", "File log message") << "\"" << std::endl;
     }
     EXPECT_TRUE(match);
 
