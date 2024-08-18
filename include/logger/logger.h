@@ -17,6 +17,8 @@ namespace Logger {
     const std::string YELLOW = "\033[33m";
     const std::string RED = "\033[31m";
 
+
+
     enum LogLevel { DEBUG, INFO, WARN, ERROR };
 
     const std::string levels[] = {"DEBUG", "INFO", "WARN", "ERROR"};
@@ -31,25 +33,34 @@ namespace Logger {
     const LogLevel globalLogLevel = DEBUG;
 #endif
 
+#define LOG_MESSAGE(logger, level, message) \
+logger.logMessage(level, message, __FILE__, __LINE__)
+
+#define logDebug(logger, message) logger.logMessage(Logger::DEBUG, message, __FILE__, __LINE__)
+#define logInfo(logger, message) logger.logMessage(Logger::INFO, message, __FILE__, __LINE__)
+#define logWarn(logger, message) logger.logMessage(Logger::WARN, message, __FILE__, __LINE__)
+#define logError(logger, message) logger.logMessage(Logger::ERROR, message, __FILE__, __LINE__)
+
     std::string toString(LogLevel level, bool use_colors);
 
     class Logger {
     public:
         explicit Logger(std::string name, std::ostream &out = std::cout, LogLevel level = DEBUG);
-        void logMessage(LogLevel level, const std::string &message);
+        void logMessage(LogLevel level, const std::string &message, const char* file, int line_number);
         void resetName(const std::string &name);
         void resetName(const std::string &&name);
         void setOutStream(std::ostream &out);
         void setFormatString(const std::string &format_string);
 
     private:
-        std::string formatLog(LogLevel level, const std::string &message);
+        std::string formatLog(LogLevel level, const std::string &message, const char* file, int line_number);
 
     private:
         bool use_colors = true;
         std::mutex log_mutex;
         std::string name;
         std::ostream *out;
+        // L - Log level, T - Time, N - Name, M - Message, t - Thread id, S - File name, # - Line number
         std::string format_string = "%L: %T [%N]: %M\n"; // Default format
 
     };

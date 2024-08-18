@@ -1,6 +1,8 @@
 #include "logger/logger.h"
 
 namespace Logger {
+
+
     Logger::Logger(std::string name, std::ostream &out, LogLevel level)
         : name{std::move(name)}
           , out{&out} {
@@ -11,8 +13,7 @@ namespace Logger {
         return use_colors ? color_levels[level] : levels[level];
     }
 
-
-    std::string Logger::formatLog(LogLevel level, const std::string &message) {
+    std::string Logger::formatLog(LogLevel level, const std::string &message, const char* file, int line_number) {
         std::string result;
         for (size_t i = 0; i < this->format_string.size(); ++i) {
             if (this->format_string[i] == '%' && i + 1 < this->format_string.size()) {
@@ -22,6 +23,8 @@ namespace Logger {
                     case 'N': result += this->name; break;
                     case 'M': result += message; break;
                     case 't': result += std::to_string(std::hash<std::thread::id>{}(std::this_thread::get_id())); break;
+                    case 'S': result += file; break;
+                    case '#': result += std::to_string(line_number); break;
                     default: result += '%'; result += this->format_string[i]; break;
                 }
             } else {
@@ -31,15 +34,16 @@ namespace Logger {
         return result;
     }
 
-    void Logger::logMessage(LogLevel level, const std::string &message) {
+    void Logger::logMessage(LogLevel level, const std::string &message, const char* file, int line_number) {
         if (level < globalLogLevel) return;
 
         std::lock_guard lock(this->log_mutex);
-        *this->out << this->formatLog(level, message);
+        *this->out << this->formatLog(level, message, file, line_number);
         if (use_colors)
             //because of stock color in cout
             *this->out << RESET;
     }
+
 
     void Logger::resetName(const std::string &name) {
         std::lock_guard lock(this->log_mutex);
