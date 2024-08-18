@@ -18,7 +18,6 @@ namespace Logger {
     const std::string RED = "\033[31m";
 
 
-
     enum LogLevel { DEBUG, INFO, WARN, ERROR };
 
     const std::string levels[] = {"DEBUG", "INFO", "WARN", "ERROR"};
@@ -46,14 +45,19 @@ logger.logMessage(level, message, __FILE__, __LINE__)
     class Logger {
     public:
         explicit Logger(std::string name, std::ostream &out = std::cout, LogLevel level = DEBUG);
-        void logMessage(LogLevel level, const std::string &message, const char* file, int line_number);
+
+        void logMessage(LogLevel level, const std::string &message, const char *file, int line_number);
+
         void resetName(const std::string &name);
+
         void resetName(const std::string &&name);
+
         void setOutStream(std::ostream &out);
+
         void setFormatString(const std::string &format_string);
 
     private:
-        std::string formatLog(LogLevel level, const std::string &message, const char* file, int line_number);
+        std::string formatLog(LogLevel level, const std::string &message, const char *file, int line_number);
 
     private:
         bool use_colors = true;
@@ -62,7 +66,6 @@ logger.logMessage(level, message, __FILE__, __LINE__)
         std::ostream *out;
         // L - Log level, T - Time, N - Name, M - Message, t - Thread id, S - File name, # - Line number
         std::string format_string = "%L: %T [%N]: %M\n"; // Default format
-
     };
 }
 

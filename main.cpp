@@ -5,5 +5,5 @@
 int main() {
     Logger::Logger log("bebris");
     log.setFormatString("%L: %T [%N]: %M (%S: %#)\n");
-    logDebug(log,"I'm DEBUG");
+    logDebug(log, "I'm DEBUG");
 }
