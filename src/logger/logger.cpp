@@ -1,6 +1,8 @@
 #include "logger/logger.h"
 
 namespace Logger {
+    Logger globalLogger("GlobalLogger");
+
     Logger::Logger(std::string name, std::ostream &out, LogLevel level)
         : name{std::move(name)}
           , out{&out} {
@@ -46,9 +48,9 @@ namespace Logger {
 
     void Logger::logMessage(LogLevel level, const std::string &message, const char *file, int line_number) {
         if (level < globalLogLevel) return;
-
+        const std::string res = this->formatLog(level, message, file, line_number);
         std::lock_guard lock(this->log_mutex);
-        *this->out << this->formatLog(level, message, file, line_number);
+        *this->out << res;
         if (use_colors)
             //because of stock color in cout
             *this->out << RESET;

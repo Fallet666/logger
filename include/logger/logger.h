@@ -17,7 +17,6 @@ namespace Logger {
     const std::string YELLOW = "\033[33m";
     const std::string RED = "\033[31m";
 
-
     enum LogLevel { DEBUG, INFO, WARN, ERROR };
 
     const std::string levels[] = {"DEBUG", "INFO", "WARN", "ERROR"};
@@ -39,6 +38,11 @@ logger.logMessage(level, message, __FILE__, __LINE__)
 #define logInfo(logger, message) logger.logMessage(Logger::INFO, message, __FILE__, __LINE__)
 #define logWarn(logger, message) logger.logMessage(Logger::WARN, message, __FILE__, __LINE__)
 #define logError(logger, message) logger.logMessage(Logger::ERROR, message, __FILE__, __LINE__)
+
+#define logDebugGlobal(message) Logger::globalLogger.logMessage(Logger::DEBUG, message, __FILE__, __LINE__)
+#define logInfoGlobal(message) Logger::globalLogger.logMessage(Logger::INFO, message, __FILE__, __LINE__)
+#define logWarnGlobal(message) Logger::globalLogger.logMessage(Logger::WARN, message, __FILE__, __LINE__)
+#define logErrorGlobal(message) Logger::globalLogger.logMessage(Logger::ERROR, message, __FILE__, __LINE__)
 
     std::string toString(LogLevel level, bool use_colors);
 
@@ -67,6 +71,8 @@ logger.logMessage(level, message, __FILE__, __LINE__)
         // L - Log level, T - Time, N - Name, M - Message, t - Thread id, S - File name, # - Line number
         std::string format_string = "%L: %T [%N]: %M\n"; // Default format
     };
+
+    extern Logger globalLogger;
 }
 
 #endif //LOGGER_H
