@@ -28,22 +28,22 @@ protected:
 };
 
 TEST_F(LoggerTest, DebugMessage) {
-    logger.logMessage(Logger::DEBUG, "Debug message");
+    logDebug(logger, "Debug message");
     checkLog(buildExpectedLogString(Logger::DEBUG, "TestLogger", "Debug message"));
 }
 
 TEST_F(LoggerTest, InfoMessage) {
-    logger.logMessage(Logger::INFO, "Info message");
+    logInfo(logger, "Info message");
     checkLog(buildExpectedLogString(Logger::INFO, "TestLogger", "Info message"));
 }
 
 TEST_F(LoggerTest, WarningMessage) {
-    logger.logMessage(Logger::WARN, "Warning message");
+    logWarn(logger, "Warning message");
     checkLog(buildExpectedLogString(Logger::WARN, "TestLogger", "Warning message"));
 }
 
 TEST_F(LoggerTest, ErrorMessage) {
-    logger.logMessage(Logger::ERROR, "Error message");
+    logError(logger, "Error message");
     checkLog(buildExpectedLogString(Logger::ERROR, "TestLogger", "Error message"));
 }
 
@@ -51,7 +51,7 @@ TEST_F(LoggerTest, MultiThreadedLogging) {
     std::vector<std::thread> threads;
     for (int i = 0; i < 10; ++i) {
         threads.emplace_back([this, i] {
-            logger.logMessage(Logger::INFO, "Message " + std::to_string(i));
+            logInfo(logger, "Message " + std::to_string(i));
         });
     }
     for (auto &t: threads) {
@@ -78,7 +78,7 @@ TEST_F(LoggerTest, LogToFile) {
     std::ofstream file("test_log.txt");
     Logger::Logger fileLogger("FileLogger", file);
 
-    fileLogger.logMessage(Logger::DEBUG, "File log message");
+    logDebug(fileLogger, "File log message");
 
     file.close();
 
@@ -96,4 +96,12 @@ TEST_F(LoggerTest, LogToFile) {
     EXPECT_TRUE(match);
 
     std::remove("test_log.txt");
+}
+
+TEST_F(LoggerTest, format_change) {
+    Logger::Logger formatted_logger("FormattedLogger", oss);
+    formatted_logger.setFormatString("%L %N %M %t %S %#");
+    logDebug(formatted_logger, "Debug message");
+    std::string output = oss.str();
+    EXPECT_TRUE(output.find("DEBUG FormattedLogger Debug message")!= std::string::npos);
 }
