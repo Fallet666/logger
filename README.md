@@ -172,7 +172,7 @@ Colors are automatically disabled if you use a different output stream (for exam
 ## Logging in multithreaded applications
 The project provides support for multithreaded logging. This means that several threads can simultaneously write logs without the risk of data corruption or race conditions.
 
-## Thread synchronization
+### Thread synchronization
 To ensure thread safety, the Logger class uses a mutex (`std::mutex`). Each time the logging function is called or the logger fields are changed, the thread is blocked until the operation is completed. This prevents simultaneous access to shared resources (for example, the output stream or logger settings), which guarantees the correctness and integrity of the data in the logs.
 ### An example of multithreaded logging
 ```c++
