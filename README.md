@@ -1,94 +1,94 @@
+### [Документация на русском](ru/README.md)
 # Logger Library
 
-Этот проект представляет собой простую и гибкую библиотеку для логирования на C++. Библиотека поддерживает разные уровни логирования, форматирование сообщений и возможность записи логов в разные потоки.
+This project is a simple and flexible logging library in C++. The library supports different logging levels, message formatting and the ability to write logs to different streams.
 
-## Основные возможности
+## Main features
 
-- Поддержка различных уровней логирования: `DEBUG`, `INFO`, `WARN`, `ERROR`.
-- Настраиваемое форматирование логов.
-- Возможность логирования в несколько потоков с защитой от гонок данных.
-- Логирование в разные выходные потоки (`std::cout`, файлы и т.д.).
-- Возможность использования глобального логгера.
+- Support for different logging levels: `DEBUG`, `INFO`, `WARN`, `ERROR`.
+- Customizable log formatting.
+- Ability to log to multiple streams with data race protection.
+- Logging to different output streams (`std::cout`, files, etc.).
+- Ability to use a global logger.
 
-## Установка
+## Installation
 
-1. Склонируйте репозиторий:
-    ```bash
-    git clone <https://github.com/Fallet666/logger.git>
-    ```
-2. Перейдите в директорию проекта и соберите его с использованием CMake:
-    ```bash
-    cd logger
-    mkdir build
-    cd build
-    cmake ..
-    make
-    ```
+1. Clone the repository:
+```bash
+git clone <https://github.com/Fallet666/logger.git>
+```
+2. Go to the project directory and build it using CMake:
+```bash
+cd logger
+mkdir build
+cd build
+cmake ..
+make
+```
 
+## Basic concepts
 
-## Основные концепции
+- **Logger**: The main class for logging. Create an instance of this class to log to a specific stream.
+- **Global logger**: A singleton instance of `Logger` that can be used by default throughout the project.
 
-- **Logger**: основной класс для логирования. Создавайте экземпляр этого класса для логирования в определенный поток.
-- **Глобальный логгер**: Singleton-экземпляр `Logger`, который можно использовать по умолчанию во всем проекте.
+## Logging functions
 
-## Функции логирования
+The project provides several functions for writing logs with different levels of importance. These functions allow you to flexibly control the output of messages depending on their severity. Logs are divided into four levels:
 
-В проекте доступны несколько функций для записи логов с разными уровнями важности. Эти функции позволяют гибко управлять выводом сообщений в зависимости от их критичности. Логи делятся на четыре уровня:
+- `DEBUG` — For debugging information.
+- `INFO` — For general informational messages.
+- `WARN` — For warnings.
+- `ERROR` — For errors that require attention.
 
-- `DEBUG` — Для отладочной информации.
-- `INFO` — Для общих информационных сообщений.
-- `WARN` — Для предупреждений.
-- `ERROR` — Для ошибок, требующих внимания.
-
-### Базовые функции
+### Basic functions
 
 #### `LOG_MESSAGE(Logger& logger, LogLevel level, const std::string& message)`
 
-Записывает сообщение с заданным уровнем. Эта функция является универсальной и может использоваться для логирования сообщений любого уровня.
+Logs a message with the specified level. This function is universal and can be used to log messages of any level.
 
-#### Пример использования:
+#### Example of use:
 
 ```c++
 Logger::Logger log("Logger");
 LOG_MESSAGE(log, Logger::DEBUG, "I'm MESSAGE");
 ```
 
-### Упрощенные функции для каждого уровня
-Эти функции предназначены для упрощения вызова логирования на определённом уровне:
+### Simplified functions for each level
+These functions are intended to simplify the call to logging at a specific level:
 #### 1. `logDebug(Logger& logger, const std::string& message)`
-Логирует сообщение с уровнем `DEBUG`.
+Logs a message with the `DEBUG` level.
 
-#### Пример использования:
+#### Usage example:
 ```c++
 logDebug(log, "This is a debug message");
 ```
 
 #### 2. `logInfo(Logger& logger, const std::string& message)`
-Логирует сообщение с уровнем `INFO`.
+Logs a message with level `INFO`.
 
-#### Пример использования:
+#### Usage example:
 ```c++
 logInfo(log, "This is an info message");
 ```
 #### 3. `logWarn(Logger& logger, const std::string& message)`
-Логирует сообщение с уровнем `WARN`.
+Logs a message with level `WARN`.
 
-#### Пример использования:
+#### Usage example:
 ```c++
 logWarn(log, "This is a warning message");
-```   
+```
 #### 4. `logError(Logger& logger, const std::string& message)`
-Логирует сообщение с уровнем `ERROR`.
+Logs a message with level `ERROR`.
 
-#### Пример использования:
+#### Usage example:
 ```c++
 logError(log, "This is an error message");
 ```
 
-### Глобальные функции логирования
-Проект также предоставляет глобальные функции логирования, которые используют глобальный логгер (globalLogger). Эти функции позволяют записывать сообщения без необходимости создания и управления собственными экземплярами логгера.
+### Global logging functions
+The project also provides global logging functions that use the global logger. These functions allow you to log messages without having to create and manage your own logger instances.
 
-Аналогично базовым функциям существуют следующие глобальные функции логирования:
+Similar to the basic functions, there are the following global logging functions:
 
 - `logMessageGlobal(LogLevel level, const std::string& message)`
 - `logDebugGlobal(const std::string& message)`
@@ -96,106 +96,105 @@ logError(log, "This is an error message");
 - `logWarnGlobal(const std::string& message)`
 - `logErrorGlobal(const std::string& message)`
 
-### Уровень логирования
-Можно установить уровень логирования через `Cmake`, тогда будут отображаться логи не ниже заданного уровня. Например, если вы установите уровень `Warn`, то будут отображаться логи уровня `Warn` и `Error`.
-#### Использование в Cmake:
+### Logging level
+You can set the logging level via `Cmake`, then logs of levels not lower than the specified level will be displayed. For example, if you set the level `Warn`, then logs of levels `Warn` and `Error` will be displayed. #### Usage in Cmake:
 ```cmake
 set(DEFAULT_LOG_LEVEL DEBUG)
 add_compile_definitions(GLOBAL_LOG_LEVEL=${DEFAULT_LOG_LEVEL})
 ```
 
-### Примечание
-Каждая из функций логирования автоматически добавляет информацию о файле и строке, откуда был вызван лог, используя макросы __FILE__ и __LINE__. Это позволяет легче отслеживать источник логов в коде.
+### Note
+Each of the logging functions automatically adds information about the file and line from which the log was called, using the __FILE__ and __LINE__ macros. This makes it easier to track the source of logs in your code.
 
-## Форматирование логов
+## Log formatting
 
-### Форматирование по умолчанию:
+### Default formatting:
 
-Строка форматирования: "%L: %T [%N]: %M\n"
+Format string: "%L: %T [%N]: %M\n"
 
-Пример вывода:
+Example output:
 
-    DEBUG: 12:34:56 [MyLogger]: This is a debug message
+DEBUG: 12:34:56 [MyLogger]: This is a debug message
 
-### Расширенное форматирование
-Логи можно кастомизировать с помощью строки форматирования. По умолчанию строка форматирования может содержать следующие компоненты:
-- **%L** — Уровень логирования (DEBUG, INFO, WARN, ERROR).
-- **%T** — Время записи лога в формате HH:MM:SS.
-- **%N** — Имя логгера.
-- **%M** — Сообщение лога.
-- **%t** — Идентификатор потока, который записал лог.
-- **%S** — Имя файла, из которого был вызван лог.
-- **%#** — Номер строки в файле, откуда был вызван лог.
+### Advanced formatting
+Logs can be customized using a format string. By default, the format string can contain the following components:
+- **%L** — Log level (DEBUG, INFO, WARN, ERROR).
+- **%T** — Log recording time in HH:MM:SS format.
+- **%N** — Logger name.
+- **%M** — Log message.
+- **%t** — Thread identifier that wrote the log.
+- **%S** — File name from which the log was called.
+- **%#** — Line number in the file from which the log was called.
 
-Эти спецификаторы можно комбинировать и располагать в любом порядке, чтобы настроить формат логов под нужды проекта.
+These specifiers can be combined and placed in any order to customize the log format to the needs of the project.
 
-Строка форматирования задается следующим образом:
+The format string is specified as follows:
 
 ```c++
-Logger::Logger log("custom formating");
+Logger::Logger log("custom formatting");
 log.setFormatString("%L: %T [%N]: %M (%S: %#)\n");
 ```
-### Использование цветов в логах
-В проекте предусмотрена возможность цветного вывода логов в консоль, чтобы легко различать сообщения разных уровней. Цвета автоматически применяются, если выходной поток логгера настроен на `std::cout`.
+### Using colors in logs
+The project provides the ability to colorize log output to the console to easily distinguish messages of different levels. Colors are automatically applied if the logger output stream is set to `std::cout`.
 
-#### Цветовая схема:
-- `DEBUG` — <span style="color:white">Белый</span> (\033[37m).
-- `INFO` — <span style="color:green">Зеленый</span> (\033[32m).
-- `WARN` — <span style="color:yellow">Желтый</span> (\033[33m).
-- `ERROR` — <span style="color:red">Красный</span> (\033[31m).
+#### Color scheme:
+- `DEBUG` — <span style="color:white">White</span> (\033[37m).
+- `INFO` — <span style="color:green">Green</span> (\033[32m).
+- `WARN` — <span style="color:yellow">Yellow</span> (\033[33m).
+- `ERROR` — <span style="color:red">Red</span> (\033[31m).
 
-Цвета можно увидеть в терминале при выводе логов, что значительно упрощает идентификацию важности сообщений.
+Colors can be seen in the terminal when logging, which makes it much easier to identify the importance of messages.
 
-#### Отключение цвета
-Цвета автоматически отключаются, если вы используете другой поток вывода (например, запись логов в файл).
+#### Disabling color
+Colors are automatically disabled if you use a different output stream (for example, writing logs to a file).
 
+## Logging in multithreaded applications
+The project provides support for multithreaded logging. This means that several threads can simultaneously write logs without the risk of data corruption or race conditions.
 
-## Логирование в многопоточных приложениях
-В проекте предусмотрена поддержка многопоточного логирования. Это значит, что несколько потоков могут одновременно записывать логи без риска порчи данных или возникновения гонок.
-
-Синхронизация потоков
-Для обеспечения потокобезопасности в классе Logger используется мьютекс (`std::mutex`). Каждый раз, когда вызывается функция логирования или происходит изменение полей логгера, поток блокируется до завершения операции. Это предотвращает одновременный доступ к общим ресурсам (например, к выходному потоку или настройкам логгера), что гарантирует корректность и целостность данных в логах.
-### Пример многопоточного логирования
+Thread synchronization
+To ensure thread safety, the Logger class uses a mutex (`std::mutex`). Each time the logging function is called or the logger fields are changed, the thread is blocked until the operation is completed. This prevents simultaneous access to shared resources (for example, the output stream or logger settings), which guarantees the correctness and integrity of the data in the logs.
+### An example of multithreaded logging
 ```c++
 Logger::Logger log("MultiThreadLogger");
 
 std::vector<std::thread> threads;
 for (int i = 0; i < 10; ++i) {
-    threads.emplace_back([&log, i] {
-        logInfo(log, "Message from thread " + std::to_string(i));
-    });
+threads.emplace_back([&log, i] {
+logInfo(log, "Message from thread " + std::to_string(i));
+});
 }
 
 for (auto &t : threads) {
-    t.join();
+t.join();
 }
 ```
 
-В этом примере создается 10 потоков, каждый из которых записывает лог-сообщение с информацией о своем номере. Благодаря использованию мьютекса, все сообщения будут записаны корректно и без смешивания.
+This example creates 10 threads, each of which writes a log message with information about its number. Due to the use of a mutex, all messages will be written correctly and without mixing.
 
-### Особенности многопоточного логирования
-- **Потокобезопасность:** Использование мьютекса внутри логгера гарантирует, что одновременно будет выполняться только одна операция — либо запись сообщения, либо изменение полей логгера (например, смена выходного потока или формата лога).
-- **Производительность:** Несмотря на блокировку, логгер спроектирован так, чтобы минимизировать влияние на производительность. Однако при большом количестве логов или высокой нагрузке на систему возможны задержки.
-- **Вывод в разные потоки:** Логгер позволяет использовать различные выходные потоки для разных экземпляров, что может быть полезно для разделения логов по категориям или источникам.
+### Features of multi-threaded logging
+- **Thread safety:** Using a mutex inside the logger ensures that only one operation will be performed at a time - either writing a message or changing the logger fields (for example, changing the output stream or log format).
+- **Performance:** Despite the lock, the logger is designed to minimize the impact on performance. However, with a large number of logs or high system load, delays are possible.
+- **Output to different streams:** The logger allows you to use different output streams for different instances, which can be useful for separating logs by category or source.
 
-## Логирование в разные выходные потоки 
-Проект предоставляет гибкую возможность настройки выходного потока для логгера. Это означает, что вы можете направлять логи в любой поток, поддерживающий интерфейс `std::ostream`, будь то стандартный вывод (`std::cout`), файлы, строковые потоки (`std::ostringstream`) или даже пользовательские потоки.
+## Logging to different output streams
 
-### Установка выходного потока
-При создании экземпляра логгера вы можете указать, куда будут записываться логи. По умолчанию, логи направляются в `std::cout`, но это поведение можно изменить:
+The project provides a flexible way to configure the output stream for the logger. This means that you can direct logs to any stream that supports the `std::ostream` interface, be it standard output (`std::cout`), files, string streams (`std::ostringstream`) or even custom streams.
+
+### Setting the output stream
+When creating a logger instance, you can specify where the logs will be written. By default, logs are directed to `std::cout`, but this behavior can be changed:
 ```c++
 Logger::Logger log("FileLogger", std::ofstream("log.txt"));
 ```
-В этом примере логи будут записываться в файл log.txt.
+In this example, logs will be written to the log.txt file.
 
-### Смена выходного потока
-Вы также можете изменить выходной поток логгера в процессе работы программы с помощью метода `setOutStream`:
+### Changing the output stream
+You can also change the logger output stream while the program is running using the `setOutStream` method:
 ```c++
 Logger::Logger log("Logger");
 log.setOutStream(std::cerr);
 ```
 
-### Пример использования с различными потоками
+### Example of using different streams
 
 ```c++
 std::ofstream file("output.log");
@@ -213,5 +212,4 @@ file.close();
 ```
 
 ---
-*Если у вас есть предложения по улучшению или вы обнаружили ошибки, не стесняйтесь создавать `issue` в репозитории проекта. Я всегда рад помощи со стороны сообщества и буду благодарен за ваш вклад в развитие проекта.*
-
+*If you have any suggestions for improvement or found any bugs, feel free to create an `issue` in the project repository. I always welcome help from the community and would appreciate your contribution to the project.*
