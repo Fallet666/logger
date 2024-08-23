@@ -17,6 +17,7 @@ This project is a simple and flexible logging library in C++. The library suppor
     - [Advanced Formatting](#advanced-formatting)
     - [Using Colors in Logs](#using-colors-in-logs)
 - [Logging in Multithreaded Applications](#logging-in-multithreaded-applications)
+    - [Thread Synchronization](#thread-synchronization)
     - [An example of Multithreaded Logging](#an-example-of-multithreaded-logging)
     - [Features of Multi-threaded Logging](#features-of-multi-threaded-logging)
 - [Logging to Different Output Streams](#logging-to-different-output-streams)
