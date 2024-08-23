@@ -3,6 +3,27 @@
 
 This project is a simple and flexible logging library in C++. The library supports different logging levels, message formatting and the ability to write logs to different streams.
 
+## Table of contents
+- [Main features](#main-features)
+- [Installation](#installation)
+- [Basic Concepts](#basic-concepts)
+- [Logging Functions](#logging-functions)
+    - [Basic Functions](#basic-functions)
+    - [Simplified Functions for Each Level](#simplified-functions-for-each-level)
+    - [Global Logging Functions](#global-logging-functions)
+    - [Logging Level](#logging-level)
+- [Log Formatting](#log-formatting)
+    - [Default Formatting](#default-formatting)
+    - [Advanced Formatting](#advanced-formatting)
+    - [Using Colors in Logs](#using-colors-in-logs)
+- [Logging in Multithreaded Applications](#logging-in-multithreaded-applications)
+    - [An example of Multithreaded Logging](#an-example-of-multithreaded-logging)
+    - [Features of Multi-threaded Logging](#features-of-multi-threaded-logging)
+- [Logging to Different Output Streams](#logging-to-different-output-streams)
+    - [Setting the Output Stream](#setting-the-output-stream)
+    - [Changing the Output Stream](#changing-the-output-stream)
+    - [Example of Using Different Streams](#example-of-using-different-streams)
+
 ## Main features
 
 - Support for different logging levels: `DEBUG`, `INFO`, `WARN`, `ERROR`.
