@@ -3,7 +3,7 @@
 namespace Logger {
     Logger globalLogger("GlobalLogger");
 
-    Logger::Logger(std::string name, std::ostream &out, LogLevel level)
+    Logger::Logger(std::string name, std::ostream &out)
         : name{std::move(name)}
           , out{&out} {
         use_colors = &out == &std::cout;
