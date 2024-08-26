@@ -205,7 +205,8 @@ The project provides a flexible way to configure the output stream for the logge
 ### Setting the output stream
 When creating a logger instance, you can specify where the logs will be written. By default, logs are directed to `std::cout`, but this behavior can be changed:
 ```c++
-Logger::Logger log("FileLogger", std::ofstream("log.txt"));
+std::ofstream file("log.txt");
+Logger::Logger log("FileLogger", file);
 ```
 In this example, logs will be written to the log.txt file.
 
