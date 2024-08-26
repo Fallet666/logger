@@ -206,7 +206,8 @@ for (auto &t : threads) {
 ### Установка выходного потока
 При создании экземпляра логгера вы можете указать, куда будут записываться логи. По умолчанию, логи направляются в `std::cout`, но это поведение можно изменить:
 ```c++
-Logger::Logger log("FileLogger", std::ofstream("log.txt"));
+std::ofstream file("log.txt");
+Logger::Logger log("FileLogger", file);
 ```
 В этом примере логи будут записываться в файл log.txt.
 
